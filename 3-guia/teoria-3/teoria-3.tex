@@ -427,15 +427,16 @@
         \end{itemize}
 
         Condición \magenta{suficiente}:
-        $$
-          \cajaResultado  {
-            \textit{ Si dos grafos tienen la misma \ul{matriz de adyacencia} entonces son \ul{isomorfos}.}
-          }
-        $$
+        \parrafoDestacado {
+          \it
+          Si dos grafos $G_1$ y $G_2$ con matrices de adyacencia $A_1$ y $A_2$ respectivamente,
+          tienen $\columna(A_1) = \columna(A_2)$, entonces son \underline{isomorfos}.
+        }
+        $\columna(A)$ es el espacio columna de la matriz $A$. Es como decir que las matrices de adyacencias son una permutación.
 
         Ejemplo ejemplificante de \textit{isomorfismitattt}:
 
-        \begin{minipage}{0.6\textwidth}
+        \begin{minipage}{0.5\textwidth}
           {\small
             $$
               \begin{tikzpicture} [grafo style, node distance = 1.65cm]
@@ -487,14 +488,21 @@
             $$
           }
         \end{minipage}
-        \begin{minipage}{0.2\textwidth}
-          La función $f$ biyectiva que los relaciona:
+        \begin{minipage}{0.3\textwidth}
+          Las funciones $f\ytext g$ biyectivas que los relacionan:
           $$
             \llave{l}{
               f(1) = y\\
-              f(2) = w\\
-              f(3) = x\\
+              f(2) = x\\
+              f(3) = w\\
               f(4) = z
+            }
+            \otext
+            \llave{l}{
+              g(1) = x\\
+              g(2) = y\\
+              g(3) = z\\
+              g(4) = w
             }
           $$
         \end{minipage}

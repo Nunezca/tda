@@ -8,22 +8,27 @@
 
 ## Algunos ejercicios sobre _Técnicas de diseño de algoritmos_ (ex algo 3).
 
+
+¿Te gusta el repo, sirve, vale la pena seguir haciéndolo? Se comenta que la materia cambia en el 1er cuatri del 2026, así
+que hasta no saber si entran las cosas, no voy a seguir avanzando con las soluciones de grafos. Just saying.
+
+
 En cada directorio `i-guia` vas a encontrar el archivo `i-sol.pdf` que no es otra cosa que la última actualización de la guía `i-ésima`.
 
 - [Guía 0 - Repaso inducción](https://github.com/nad-garraz/tda/blob/main/0-guia/0-sol.pdf)
 - [Guía 1 - Divide and Conquer](https://github.com/nad-garraz/tda/blob/main/1-guia/1-sol.pdf)
-- [Guía 2 - Back, PD](https://github.com/nad-garraz/tda/blob/main/2-guia/2-sol.pdf)
+- [Guía 2 - Backtracking, PD, memoization, tabulation](https://github.com/nad-garraz/tda/blob/main/2-guia/2-sol.pdf)
 - [Guía 3 - Intro Grafos](https://github.com/nad-garraz/tda/blob/main/3-guia/3-sol.pdf)
 
 _¡Una estrellita 🌟 al repo es siempre bienvenida!_
 `(^_^)/`
 [Ni hablar de uno o _más_ cafecitos ☕️☕️☕️](https://cafecito.app/nad-garraz)
 
-Cualquier error y/u horror que veas (¡Que los hay, los hay!), no dudes en mandarme mensajito al Telegram.
-Si querés subir algún ejercicio también podés! Hace un Pull request o avisame en el [Telegram](https://t.me/+1znt2GV1i8cwMTNh)
+Cualquier error y/u horror que veas (¡Que los hay, los hay!), no dudes en mandarme mensajito al [Telegram](https://t.me/+1znt2GV1i8cwMTNh).
+
+Si querés subir algún ejercicio también podés! Hace un PR o avisame en el [Telegram](https://t.me/+1znt2GV1i8cwMTNh)
 
 Si tenés preguntas sobre el workflow para contribuir preguntá en el grupo de [Telegram](https://t.me/+1znt2GV1i8cwMTNh)
-
 
 Podés usar el código como quieras siguiendo esta licencia: [CC BY-NC](https://creativecommons.org/licenses/by-nc/4.0/)
 
@@ -34,4 +39,3 @@ _¡Una estrellita 🌟 al repo es siempre bienvenida!_
 
 [Comprame un ☕️☕️☕️ `(ﾟ◇ﾟ；)ノﾞ`](https://cafecito.app/nad-garraz)
 
-¿Te gusta el repo, sirve, vale la pena seguirlo mejorando? 

@@ -1,8 +1,49 @@
+\lstset{
+  mathescape=true,
+  emph={[1]funcion, return, ret, retorno},
+  emph={[2]para, cada, si, sino, if, else, true, false, mientras, not, o, y, null, en, de},
+  emph={[3]agrego, borrar, copiar, agregar,sort,concatenar},
+  emph={[4]from, to, head, next},
+  emphstyle={[1]\color{violet}\it},
+  emphstyle={[2]\color{red}\it},
+  emphstyle={[3]\color{OliveGreen}\it},
+  emphstyle={[4]\footnotesize\color{violet}},
+  morecomment={[l]{//}},
+  commentstyle={\color{gray}\it\footnotesize}
+}
+
+\def\grafo14{
+  \begin{tikzpicture}[
+      baseline = 0,
+      grafo style,
+      minimum size = 16pt,
+      arista/.style={thick}
+    ]
+    \node[nodo] (v1) {$v_1$};
+    \node[nodo, right of = v1] (v2) {$v_2$};
+    \node[nodo, right of = v2] (v3) {$v_3$};
+    \node[nodo, below right of = v1] (v4) {$v_4$};
+    \node[nodo, right of = v4] (v5) {$v_5$};
+    \node[nodo, below of = v4] (v6) {$v_6$};
+    \node[nodo, right of = v3] (v7) {$v_7$};
+
+    \draw[arista] (v1) to (v2) to (v3) to (v4);
+    \draw[arista] (v1) to (v4) to (v5) to (v7);
+    \draw[arista] (v4) to (v2) to (v5) to (v7);
+    \draw[arista] (v6) to (v4);
+    \draw[arista, bend right = 40pt] (v7) to (v2);
+    \draw[arista, bend right = 40pt] (v6) to (v7);
+
+    \node[above of = 1] {$G$};
+  \end{tikzpicture}
+}
+
 \begin{enunciado}{\ejercicio[RepresentaGrafos*Hacer*]}
   \textit{RepresentaGrafos}
 
-  Discutir (brevemente) las ventajas y desventajas en cuanto a la complejidad temporal y espacial
-  de las siguientes implementaciones de un conjunto de vecindarios para un grafo $G$, de acuerdo a
+  Discutir (brevemente) las ventajas y desventajas (de las \textbf{\red{E}structuras de \red{D}atos}) en cuanto
+  a la complejidad temporal y espacial de las siguientes implementaciones de un conjunto de vecindarios
+  para un grafo $G$, de acuerdo a
   las siguientes operaciones:
 
   \textbf{Operaciones}
@@ -18,10 +59,10 @@
           vecindario en un orden dado.
   \end{enumerate}
 
-  \textbf{Estructuras de datos}
-  \begin{enumerate}[label=$\alph*)$, itemsep=-2pt]
+  \textbf{\red{E}structuras de \red{D}atos}
+  \begin{enumerate}[label=$\text{\red{ED}}_\arabic*)$, itemsep=-2pt]
     \item $N$ se representa con una secuencia (vector o lista) que en cada posición $v$ tiene el
-          conjunto $N(v)$ implementado sobre una secuencia (lista o vector). Cada vértice es una
+          conjunto $N(v)$ implementado sobre una secuencia (vector o lista). Cada vértice es una
           estructura que tiene un índice para acceder en $O(1)$ a $N(v)$. Esta representación se
           conoce comúnmente como \textit{lista de adyacencias}.
 
@@ -39,4 +80,360 @@
   \end{enumerate}
 \end{enunciado}
 
-\Hacer
+\textit{Sobre las \red{E}structuras de \red{D}atos}:
+
+Partiendo de un grafo \ul{no} dirigido ejemplificante $G$ voy a ir describiendo las distintas estructuras propuestas:
+\begin{enumerate}[label=$\text{\red{ED}}_\arabic*)$, itemsep=-2pt]
+  \item\label{ej-14:ed1} Un arreglo $A$ de tamaño $|V| = n$ para el cual el elemento $i$ apunta a una \textit{lista enlazada}
+        cuyos nodos son el conjunto de vecinos del nodo $i$. Es decir que $A[i] \to N(v_i)$.
+
+        \begin{minipage}{0.3\textwidth}
+          $$
+            \grafo14
+          $$
+        \end{minipage}
+        \begin{minipage}{0.6\textwidth}
+          $$
+            \begin{tikzpicture}[
+                scale=1,
+                baseline = 0,
+                rect/.style={ draw, thick},
+                arrowstyle/.style={-latex, thick},
+                submatriz/.style={ draw, very thick, anchor = center, inner sep = 2pt, color=#1, rounded corners=2pt,
+                  },
+              ]
+
+              \matrix (A) [
+                matrix of math nodes,
+                nodes = { rect, column sep=-\pgflinewidth, minimum size = 23pt, },
+              ]
+              {
+                1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+              };
+              \foreach \x in {1,...,7}{
+                  \node[above of = A-1-\x] () {$v_{\x}$};
+                }
+
+              \matrix (B) [matrix of math nodes,
+                nodes={rect, rounded corners = 3pt},
+                column sep=6pt, row sep=10pt,
+                below=15pt of A,
+              ]
+              {
+                v_2 & v_1 & v_2 & v_1 & v_2 & v_4 & v_2 \\
+                v_4 & v_3 & v_4 & v_2 & v_4 & v_7 & v_5 \\
+                    & v_4 &     & v_3 & v_7 &     & v_6 \\
+                    & v_5 &     & v_5 &     &     &     \\
+                    & v_7 &     & v_6 &     &     &     \\
+              };
+
+              \foreach \c in {1,...,7} {
+                  \draw[arrowstyle] (B-1-\c) -- (B-2-\c);
+                  \draw[arrowstyle] (A-1-\c) -- (B-1-\c);
+                }
+
+              \foreach \c in {2,4,5,7} {
+                  \draw[arrowstyle] (B-2-\c) -- (B-3-\c);
+                }
+
+              \foreach \c in {2,4} {
+                  \foreach \r \next in {3/4, 4/5}
+                  \draw[arrowstyle] (B-\r-\c) -- (B-\next-\c);
+                }
+
+              \node[submatriz=BrickRed, dashed, fit=(A-1-1)(A-1-7), inner sep = 4pt, label={left, BrickRed}:Arreglo]{};
+
+              \node[submatriz=Cerulean, fit=(B-1-1)(B-2-1), label={below, Cerulean}:\tiny$N(v_1)$](N1){};
+              \node[submatriz=Cerulean, fit=(B-1-2)(B-5-2), label={below, Cerulean}:\tiny$N(v_2)$]{};
+              \node[submatriz=Cerulean, fit=(B-1-3)(B-2-3), label={below, Cerulean}:\tiny$N(v_3)$]{};
+              \node[submatriz=Cerulean, fit=(B-1-4)(B-5-4), label={below, Cerulean}:\tiny$N(v_4)$]{};
+              \node[submatriz=Cerulean, fit=(B-1-5)(B-3-5), label={below, Cerulean}:\tiny$N(v_5)$]{};
+              \node[submatriz=Cerulean, fit=(B-1-6)(B-2-6), label={below, Cerulean}:\tiny$N(v_6)$]{};
+              \node[submatriz=Cerulean, fit=(B-1-7)(B-3-7), label={below, Cerulean}:\tiny$N(v_7)$]{};
+
+              \node[label={left, Cerulean}:Listas Enlazadas] at (N1.west){};
+            \end{tikzpicture}
+          $$
+        \end{minipage}
+        \begin{enumerate}[label=$\alph*)$]
+          \item Una lista de adyacencia que inicializo a partir de un conjunto de aristas tiene un \textit{running time} de:
+                $$
+                  \cajaResultado{
+                    \en O(n+m)
+                  }
+                $$
+                Dado que tengo que generar para cada uno de los $n$ vértices una lista pasando por las $m$
+                aristas, creando el $N(v)$ en el proceso. Un pseudocódigo para eso:
+                \begin{tcolorbox}
+                  \begin{lstlisting}
+para i en 1..n        //Inicializo el arreglo para cada vértice
+    A[i] $\ot$ i
+
+para arista en E[1..m]     // Ponele que arista = (from, to)
+    A[arista.from] agrego arista.to
+    A[arista.to] agrego arista.from \end{lstlisting}
+                \end{tcolorbox}
+
+                La complejidad espacial:
+                $$
+                  \cajaResultado{
+                    \en O(n + m)
+                  }
+                $$
+                Este último resultado para un grafo con $m\gg n \to O(n^2)$, complejidad espacial como la \textit{matriz de adyacencia}.
+
+          \item Para saber si dos vértices $v$ y $u$ son adyacentes, es decir si existe una arista entre ellos tengo un \textit{running time}:
+                $$
+                  \en O(\ua{1}{\textit{\green{get}} \\ N} + \minimo(d(u), d(v)) \en O(V)
+                $$
+                En un grafo no dirigido la información de la arista está repetida, una vez en $A[u]$ y otra vez en $A[v]$
+                entonces puedo buscarla \textit{en simultáneo} cortando cuando se termine la más corta:
+                \begin{tcolorbox}
+                  \begin{lstlisting}
+vActual $\ot$ A[v].head
+uActual $\ot$ A[u].head
+
+mientras vActual.next y uActual.next not null // Corto cuando se
+    si vActual=u o u.Actual=v              //terminó la vecindad más corta
+        ret "son vecinos"
+    sino 
+        vActual $\ot$ vActual.next 
+        uActual $\ot$ uActual.next 
+ret "no son vecinos" \end{lstlisting}
+                \end{tcolorbox}
+                En el \textit{más peor} de los casos recorro todo el grafo.
+
+          \item\label{ej-14:item-1-c}
+                Nada muy loco por aquí, si $|N(v)| = d(v)$.
+                $$
+                  \cajaResultado{
+                    \en O(1 + d(v))
+                  }
+                $$
+
+          \item Agregar un vértice y sus vecinos, me obliga a llamar a todos los vecinos $w \en N(v)$ e insertar ahí a $v$, agrandar
+                el arreglo de ser necesario también agregaría el costo de la nueva dimensión:
+                $$
+                  \cajaResultado{
+                    \en \ub{O(1 + d(v))}{\text{con} \\ \text{espacio}} \en \ub{O(n + d(v))}{\text{sin}}
+                  }
+                $$
+                \begin{tcolorbox}
+                  \begin{lstlisting}
+B[2*|A|]             // Declaro nuevo arreglo B con |B| > |A|. El doble en este ejemplo.
+copiar(A,B)           // clono
+A$\ot$B                // A tiene la misma info pero el doble de tamaño. La joda salió O(n)
+para cada w en N(v) 
+    agregar v en N(w)  // Update vecindades adyacentes a v \end{lstlisting}
+                \end{tcolorbox}
+
+          \item  Insertar una arista tendrá un costo constante. Si tengo que insertar una arista $vw$:
+                $$
+                  \cajaResultado{
+                    (\textit{\green{get}} ~ N(v) ) + (\textit{\green{insertar w en}} ~ N(v)) \en O(1)
+                  }
+                $$
+
+          \item Remover un vértice $w$ implica borrarlo \textit{de todos lados}, es decir tengo que buscarlo
+                en cada elemento del arreglo.
+                $$
+                  \cajaResultado  {
+                    \en O(n + m)
+                  }
+                $$
+                \begin{tcolorbox}
+                  \begin{lstlisting}
+para cada v$\distinto$w en A[1..n]
+    para cada vecino en N(v)      // O(d(v))
+        si vecino=w 
+            borrar vecino de N(v)
+    // Actualizo A 
+    A[v]$\ot$N(v)
+    A[w] $\ot$ null\end{lstlisting}
+
+                \end{tcolorbox}
+
+          \item Remover una arista $vw$ es similar al anterior, pero ahora sé a cuales $N$ tengo que ir:
+                $$
+                  O(d(v) + d(w))
+                $$
+                \begin{tcolorbox}
+                  \begin{lstlisting}
+para cada vecino en N(e.from)      // e = (e.from, e.to) = (v,w) = v->w
+    si vecino=e.to 
+        borrar vecino de N(e.from)
+e$\ot$(e.to, e.from) y repito   // la invierto y repito \end{lstlisting}
+                \end{tcolorbox}
+
+          \item \Hacer
+        \end{enumerate}
+
+        \bigskip
+
+        \parrafoDestacado{
+          \it
+          Ahora en vez de usar listas enlazadas uso vectores, arreglos ordenados. Esta estructura es muy buena
+          para hacer consultas en el grafo, dado el ordenamiento. Pero en contrapartida es
+          una porquería para operaciones dinámicas, es decir, para modificar el grafo, agregando o sacando
+          vértices, etc.
+        }
+        El \brick{arreglo} tiene en el elemento $i$ el valor del índice donde está primer vecino del vértice $i$ y consecutivo a $i$ los demás vecinos
+        del vértice $i$, el cual tiene $d(v_i) = \brick{A}[i+1] - \brick{A}[i]$ vecinos.
+        El orden en el \green{arreglo} de los vecinos me va a permitir buscar con menor complejidad que en la \textit{lista enlazada}.
+
+        Por ejemplo $N(v_2) = \brick{A}[2] = 3 \to B[3..(3 + d(v_2) - 1)] = [1,3,4,5,7]$.
+
+        Parecido a la \textit{lista de adyacencia}, esto es un \textit{arreglo de adyacencia}.
+
+        \begin{minipage}{0.2\textwidth}
+          \grafo14
+        \end{minipage}
+        \begin{minipage}{0.65\textwidth}
+          $$
+            \begin{tikzpicture}[
+                baseline = 0,
+                rect/.style={ draw, thick},
+                arrowstyle/.style={-latex, thick},
+                submatriz/.style={draw, anchor = center, thick, inner sep = 1pt, color=#1, rounded corners=4pt,
+                  },
+              ]
+
+              \matrix (A) [
+                matrix of math nodes,
+                nodes = { rect, column sep=-\pgflinewidth, minimum size = 23pt, },
+              ]
+              {
+                1 & 3 & 8 & 10 & 15 & 18 & 20 \\
+              };
+              \foreach \x in {1,...,7}{
+                  \node[above of = A-1-\x] () {$v_{\x}$};
+                }
+
+              \matrix (B) [matrix of math nodes,
+              nodes={rect, rounded corners = 0pt},
+              column sep=1pt, row sep=10pt,
+              below=15pt of A,
+              header/.style={fill=lightgray!40},
+              ]
+              {
+              |[header]| 2 &
+              4 &
+              |[header]|1 &
+              3 &
+              4 &
+              5 &
+              7 &
+              |[header]|2 &
+              4 &
+              |[header]|1 &
+              2 &
+              3 &
+              5 &
+              6 &
+              |[header]|2 &
+              4 &
+              7 &
+              |[header]|4 &
+              7 &
+              |[header]|2 &
+              5 &
+              6 \\
+              };
+
+              \node[submatriz=BrickRed, dashed, fit=(A-1-1)(A-1-7), inner sep = 4pt, label={left, BrickRed}:Arreglo]{};
+              \node[submatriz=orange,dashed, fit=(B-1-1)(B-1-22), inner sep = 4pt, label={left, orange}:Arreglo] {};
+              \foreach \a/\b/\c in {1/1/2,2/3/5,3/8/2,4/10/5,5/15/3,6/18/2,7/20/3} {
+                  \draw[arrowstyle] (A-1-\a.south) -- (B-1-\b.north);
+
+                  \pgfmathsetmacro{\bmenosa}{\b+\c-1}
+                  \node[submatriz=Cerulean, fit=(B-1-\b)(B-1-\bmenosa), label={below, Cerulean}:\tiny$N(v_{\a})$](){};
+                }
+            \end{tikzpicture}
+          $$
+        \end{minipage}
+
+        \begin{enumerate}[label=$\alph*)$]
+          \item Como el arreglo lo quiero ordenado, eso va a costar un $\log$ extra. La complejidad temporal queda en:
+                $$
+                  \cajaResultado{
+                    \en O(n \cdot \log(n) + m)
+                  }
+                $$
+                \begin{tcolorbox}
+                  \begin{lstlisting}
+A[n]        // Declaro arreglo A |V|
+para arista en E[1..m]     // Ponele que arista = (from, to)
+    ...                       //genero un arreglo N(from) = [to1, to2,...] para cada arista
+para cada N(v)          // Ordeno esto que cuesta O(n*log(n))
+    sort(N(v))
+para i en [1..n] // Inicializo el vector A con valor A[v]=i tal que $A[i]=N_v[i]$
+    si i = 1
+        A[i]$\ot$1 
+    sino
+        A[i]$\ot$|N[i-1]|+1 \end{lstlisting}
+                \end{tcolorbox}
+
+          \item Acá es cuando el ordenamiento toma valor. El costo de saber si $v$ y $w$ son adyacentes será:
+                $$
+                  \cajaResultado{
+                    \en O(\minimo(\log(d(u)), \log(d(v)))
+                  }
+                $$
+                El grado de cada vértice lo saco en $O(1)$ del arreglo $A$. Por ejemplo:
+                $$
+                  d(i) = A[i+1] - A[i]
+                $$
+
+          \item  idem \ref{ej-14:ed1} con listas enlazadas.
+          \item  Agregar un vértice $v$ me obliga a armar los arreglos $A$ y $B$ nuevamente, aunque me ahorraría
+                el ordenamiento, ya que el nuevo vértice se pone al final del arreglo $A$ y al final de cada $N(v)$ de B.
+
+                Luego restaría ordenar $N(v)$, lo que me agrega un $\log$. La complejidad quedaría:
+                $$
+                  \cajaResultado{
+                    \en O(n + m + d(v) \cdot \log(d(v)))
+                  }
+                $$
+
+          \item Agregar una arista es \textit{similar en costo} a agregar un vértice.
+                \parrafoDestacado[\skull]{
+                  Modificar esa estructura estaría siendo algo horrible.
+                }
+                Agregar una arista es agregar 2 vértices $v$ y $w$. Esto implica \textit{modificar, ordenando} dos
+                grupos en $B$: $N(v) \ytext N(w)$, lo cual cuesta $O(d(v) \log(d(v)) + d(w) \log(d(w)))$
+                Luego hay que recrear todo $B$ con los nuevos $N(v)$ y $N(w)$: $O(m)$. Un nuevo $B$ obliga
+                a recalcular todo $A$: $O(n)$. El costo total queda:
+                $$
+                  \cajaResultado{
+                    \en O(\ua{n}{A} + \ua{m}{B} +
+                    \ub{d(v) \log(d(v))}{\text{agregar}\\\text{en} ~ N(v)}
+                    +
+                    \ub{d(w) \log(d(w))}{\text{agregar}\\\text{en} ~ N(w)})
+                  }
+                $$
+
+          \item Remover un vértice con la \textit{lista de vectores} es parecido al \ref{ej-14:ed1} con listas enlazadas,
+                porque tengo que construir todo $A$ y $B$ en peor caso, pero sin reordenar:
+                $$
+                  \cajaResultado{
+                    \en O(n + m)
+                  }
+                $$
+
+          \item Remover una arista $vw$ implica rearmar los vectores $A$ y $B$, dado que con el cambio del tamaño
+                de $B$, cambian los valores de los elementos de $A$. Cómo no hay \textit{sorting} el costo es:
+                $$
+                  \cajaResultado{
+                    \en O(n + m)
+                  }
+                $$
+
+          \item \Hacer
+        \end{enumerate}
+
+  \item \Hacer
+
+  \item \Hacer
+
+  \item \Hacer
+\end{enumerate}
